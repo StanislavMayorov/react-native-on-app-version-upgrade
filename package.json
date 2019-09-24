@@ -1,0 +1,32 @@
+{
+  "name": "react-native-on-app-version-upgrade",
+  "version": "1.0.0",
+  "description": "React Native util to check app version upgrade",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StanislavMayorov/react-native-on-app-version-upgrade.git"
+  },
+  "keywords": [
+    "React Native",
+    "version",
+    "upgrade",
+    "update",
+    "app"
+  ],
+  "author": "Stanislav Mayorov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StanislavMayorov/react-native-on-app-version-upgrade/issues"
+  },
+  "homepage": "https://github.com/StanislavMayorov/react-native-on-app-version-upgrade#readme",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "lodash.memoize": "^4.1.2"
+  },
+  "peerDependencies": {
+    "react-native-device-info": "*"
+  }
+}
