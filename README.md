@@ -15,7 +15,7 @@ Users must pass their storage engine in, e.g async-storage or [redux-persist-fs-
 import AsyncStorage from '@react-native-community/async-storage';
 import { checkAppVersionUpgrade } from 'react-native-on-app-version-upgrade';
 
-checkAppVersionUpgrade({ storage: Storage, considerInstallAsUpgrade: true }).then(
+checkAppVersionUpgrade({ storage: AsyncStorage, considerInstallAsUpgrade: true }).then(
   ({ wasUpgraded }) => {
     if (wasUpgraded) {
       // for example copy asserts
@@ -23,7 +23,7 @@ checkAppVersionUpgrade({ storage: Storage, considerInstallAsUpgrade: true }).the
   },
 );
 
-checkAppVersionUpgrade({ storage: Storage }).then(
+checkAppVersionUpgrade({ storage: AsyncStorage }).then(
   ({ prevBuildNumber, buildNumber }) => {
     if (prevBuildNumber < 10 && buildNumber >= 10) {
       // for example do migrations on app upgrade
