@@ -2,7 +2,7 @@
 React native utility to check first session after an app was upgraded, e.g from Google Play
 or Apple Store.
 ## Install
-Install [react-native-device-info](https://github.com/react-native-community/,eact-native-device-info). All versions are supported.
+Install [react-native-device-info](https://github.com/react-native-community/react-native-device-info). All versions are supported.
 
 ```
 npm install react-native-on-app-version-upgrade
