@@ -6,28 +6,25 @@ const MESSAGE_NO_STORAGE =
 const MESSAGE_CANT_GET_INFO =
   "react-native-app-version-upgrade caught an error. Can't get or set version info";
 
-const STORAGE_KEY_FOR_VERSION = 'react-native-app-version-upgrade-version';
-const STORAGE_KEY_FOR_BUILD = 'react-native-app-version-upgrade-build';
+const STORAGE_KEY = 'react-native-app-version-upgrade';
 
-const versionPromise = DeviceInfo.getVersion(); //backward compatible with DeviceInfo v2 when result is number
+const versionPromise = DeviceInfo.getVersion(); //backward compatible with DeviceInfo v2 when result is string
 const buildNumberPromise = DeviceInfo.getBuildNumber();
 
 function getDataFromStorage(storage) {
-  const prevVersionPromise = storage.getItem(STORAGE_KEY_FOR_VERSION);
-  const prevBuildPromise = storage.getItem(STORAGE_KEY_FOR_BUILD);
-  return {
-    prevVersionPromise,
-    prevBuildPromise,
-  };
+  return storage.getItem(STORAGE_KEY).then(json => {
+    if (typeof json === 'string') {
+      return JSON.parse(json);
+    } else {
+      return {};
+    }
+  });
 }
 
 const getMemoizeDataFromStorage = memoize(getDataFromStorage);
 
 function saveDataToStorage(storage, version, build) {
-  return Promise.all([
-    storage.setItem(STORAGE_KEY_FOR_VERSION, version),
-    storage.setItem(STORAGE_KEY_FOR_BUILD, build),
-  ]);
+  return storage.setItem(STORAGE_KEY, JSON.stringify({version, build}));
 }
 
 const saveMemoizeDataToStorage = memoize(saveDataToStorage);
@@ -39,15 +36,18 @@ export function checkAppVersionUpgrade(config) {
     return Promise.reject(MESSAGE_NO_STORAGE);
   }
 
-  const { prevVersionPromise, prevBuildPromise } = getMemoizeDataFromStorage(storage);
+  const prevDataPromise = getMemoizeDataFromStorage(storage);
 
   return Promise.all([
-    prevVersionPromise,
-    prevBuildPromise,
+    prevDataPromise,
     versionPromise,
     buildNumberPromise,
   ])
-    .then(function([prevVersion, prevBuildNumber, version, buildNumber]) {
+    .then(function([prevData, version, buildNumber]) {
+      const {
+        version: prevVersion,
+        build: prevBuildNumber,
+      } = prevData;
       const saveAndGetResult = wasUpgraded => {
         return saveMemoizeDataToStorage(storage, version, buildNumber).then(() => ({
           wasUpgraded,
